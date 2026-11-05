@@ -185,3 +185,23 @@ New decisions get the next number. Never delete an old record; mark it
 - **Consequences:** The URL forest drops from 41 ms to about 13 ms per sample.
   Batch prediction will be slower per row; this is acceptable for a detector
   that scores one event at a time.
+
+## ADR-0016: Explainer cannot change the verdict; prompt-injection defences (Phase 4)
+
+- **Status:** Accepted (2026-11-05, Phase 4)
+- **Context:** SMS and URL text is written by attackers. A language model that
+  reads it as instructions could be made to call a scam safe.
+- **Decision:** (1) The detector sets the verdict; the language model only
+  writes the explanation. (2) Untrusted text sits between the markers
+  `### BEGIN UNTRUSTED DATA ###` and `### END UNTRUSTED DATA ###`, after marker
+  look-alikes and control characters are removed and the length is capped.
+  (3) The system prompt treats the block as inert data. (4) Every advisory is
+  checked for the three numbered steps, for marker repetition and for "safe"
+  claims about a threat. Failed checks use a fixed template instead. (5) The
+  template runner never reads the untrusted text.
+- **Consequences:** An injected instruction can at most change wording, and it
+  is discarded if it breaks the format. These defences reduce the risk; they do
+  not remove it, and the report must say so. The Llama runner is a stub until
+  Phase 6, so the explanations shown now come from the template.
+- **Known gap:** raw web addresses are reported as unsupported, because the URL
+  model needs the 85 Mendeley columns, which this build does not compute.
