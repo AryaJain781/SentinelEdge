@@ -114,8 +114,10 @@ def _url_pipeline(family: str, value: float | int) -> Pipeline:
     if family == "baseline":
         model = LogisticRegression(C=float(value), max_iter=2000, random_state=SEED)
         return Pipeline([("scale", StandardScaler()), ("clf", model)])
+    # 50 trees (ADR-0017): 100 trees was too close to the 15 ms limit on this PC.
+    # The size was chosen from latency, not from test scores.
     model = RandomForestClassifier(
-        n_estimators=100,
+        n_estimators=50,
         max_depth=int(value),
         min_samples_leaf=5,
         n_jobs=-1,

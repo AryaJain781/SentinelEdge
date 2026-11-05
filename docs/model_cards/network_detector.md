@@ -8,7 +8,7 @@
 - **Decision threshold:** 0.50
 - **Input features:** 41 NSL-KDD fields (3 text fields one-hot encoded)
 - **Size on disk:** 0.01 MB (limit 25 MB)
-- **Latency on this PC:** 7.804 ms median (limit 15 ms)
+- **Latency on this PC:** 7.431 ms median (limit 15 ms)
 - **Constraints:** met
 
 ## Performance (test split, reported once)

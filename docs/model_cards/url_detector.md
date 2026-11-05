@@ -5,20 +5,20 @@
 - **Trained:** 2026-11-05
 - **Random seed:** 42
 - **Labels:** legitimate, phishing (positive class = 1, phishing)
-- **Decision threshold:** 0.17
+- **Decision threshold:** 0.16
 - **Input features:** 85 URL-only features from the Mendeley dataset (ADR-0012)
-- **Size on disk:** 2.22 MB (limit 25 MB)
-- **Latency on this PC:** 12.889 ms median (limit 15 ms)
+- **Size on disk:** 1.12 MB (limit 25 MB)
+- **Latency on this PC:** 9.110 ms median (limit 15 ms)
 - **Constraints:** met
 
 ## Performance (test split, reported once)
 
-- Accuracy: 0.8217
-- Precision: 0.7538
-- Recall: 0.9781
-- F1: 0.8515
-- False-negative rate (missed threats): 0.0219
-- Confusion matrix (TN / FP / FN / TP): 1821 / 979 / 67 / 2998
+- Accuracy: 0.8194
+- Precision: 0.7510
+- Recall: 0.9791
+- F1: 0.8500
+- False-negative rate (missed threats): 0.0209
+- Confusion matrix (TN / FP / FN / TP): 1805 / 995 / 64 / 3001
 
 ## Limitations
 

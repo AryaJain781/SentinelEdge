@@ -8,7 +8,7 @@
 - **Decision threshold:** 0.50
 - **Input features:** `text_clean` (TF-IDF, 1-2 grams) plus 8 metadata counts
 - **Size on disk:** 0.51 MB (limit 25 MB)
-- **Latency on this PC:** 3.970 ms median (limit 15 ms)
+- **Latency on this PC:** 3.937 ms median (limit 15 ms)
 - **Constraints:** met
 
 ## Performance (test split, reported once)

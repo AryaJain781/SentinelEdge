@@ -10,6 +10,7 @@ extractor in ``src/utils/url_features.py`` is a different, explainable set.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -32,8 +33,21 @@ class URLDetector(ThreatDetector):
             raise KeyError(
                 f"Missing URL features: {missing[:5]} ({len(missing)} in total)"
             )
-        row = {name: float(sample[name]) for name in names}
+        row = {name: _finite_float(name, sample[name]) for name in names}
         return pd.DataFrame([row], columns=names)
+
+
+def _finite_float(name: str, value: Any) -> float:
+    """Convert to float and reject values that are not real numbers."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            f"URL feature '{name}' must be a number, got {value!r}"
+        ) from exc
+    if not math.isfinite(number):
+        raise ValueError(f"URL feature '{name}' must be finite, got {value!r}")
+    return number
 
 
 def load_url_detector(path: Path = MODEL_PATH) -> URLDetector:

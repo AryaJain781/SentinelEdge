@@ -88,6 +88,11 @@ def _detectors() -> dict[str, ThreatDetector]:
     return loaded
 
 
+def warm_up() -> None:
+    """Load every detector now, so the first real request is not slow."""
+    _detectors()
+
+
 def detect_input_type(input_data: Any) -> str:
     """Guess the input type. Returns "url", "sms" or "network"."""
     if isinstance(input_data, Mapping):
@@ -98,8 +103,11 @@ def detect_input_type(input_data: Any) -> str:
         raise RouterError("Dictionary input matches neither a network nor a URL record")
     if isinstance(input_data, str):
         text = input_data.strip()
-        if text and " " not in text and _URL_TOKEN.match(text):
-            return "url"
+        if text and " " not in text:
+            if text.lower().startswith(("http://", "https://", "www.")):
+                return "url"
+            if _URL_TOKEN.match(text):
+                return "url"
         return "sms"
     raise RouterError(f"Unsupported input type: {type(input_data).__name__}")
 

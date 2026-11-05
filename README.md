@@ -187,6 +187,37 @@ Split sizes and class balance are in [docs/data_splits_summary.md](docs/data_spl
 
 ---
 
+## 🎬 Demo and final results
+
+**Live checker (type or paste input):**
+
+```bash
+.venv\Scripts\python.exe -m src.ui.cli
+```
+
+**One SMS prediction:**
+
+```bash
+.venv\Scripts\python.exe -m src.detectors.demo_sms
+```
+
+**Official benchmark (test split, saved models):**
+
+```bash
+.venv\Scripts\python.exe -m benchmarks.evaluate_all
+```
+
+| Domain | Model | Precision | Recall | F1 | Missed threats | Latency (PC, median) | Size |
+|---|---|---:|---:|---:|---:|---:|---:|
+| URL phishing | Random forest, 50 trees (85 URL features) | 0.751 | 0.979 | 0.850 | 2.1% | 9.0 ms | 1.2 MB |
+| SMS scam | Naive Bayes | 0.986 | 0.907 | 0.944 | 9.3% | 4.0 ms | 0.5 MB |
+| Network attack | Logistic regression | 0.977 | 0.957 | 0.967 | 4.3% | 7.9 ms | 0.01 MB |
+
+Full tables: [docs/benchmark_summary.md](docs/benchmark_summary.md).
+Latency is measured on a PC. Phone numbers will be measured in the phone phase.
+
+---
+
 ## 🗺️ Roadmap
 
 Status key: ✅ done · 🔄 in progress · ⏳ planned

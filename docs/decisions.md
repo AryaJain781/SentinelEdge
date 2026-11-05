@@ -186,6 +186,18 @@ New decisions get the next number. Never delete an old record; mark it
   Batch prediction will be slower per row; this is acceptable for a detector
   that scores one event at a time.
 
+## ADR-0017: URL forest uses 50 trees (Phase 5)
+
+- **Status:** Accepted (2026-11-05, Phase 5)
+- **Context:** The 100-tree URL forest had a median prediction time of about
+  14 ms on this PC, and its 95th percentile went above the 15 ms limit, so the
+  speed test was unreliable.
+- **Decision:** Use 50 trees for the URL forest. The choice was made from the
+  latency measurement, not from test scores. Depth is still chosen on validation.
+- **Consequences:** The URL model is faster and smaller. Its scores were
+  re-measured on the test split, and the report must say that the URL model
+  changed in Phase 5. The 85 features and the threshold rule are unchanged.
+
 ## ADR-0016: Explainer cannot change the verdict; prompt-injection defences (Phase 4)
 
 - **Status:** Accepted (2026-11-05, Phase 4)
