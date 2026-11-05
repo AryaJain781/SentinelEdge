@@ -62,8 +62,10 @@ Licence checks below were done on the official pages on 2026-11-05.
 | Labels        | Normal or attack type, with 41 features per record |
 | Local path    | `data/raw/nsl_kdd/` (not committed) |
 | Used in phase | Phase 2 onward (network detector, WP4) |
-| Notes         | **Open item:** the CIC page now says "We apologize, this dataset is no longer available." Files cannot be downloaded from the official page. Any mirror must be checked for the same licence and file integrity before use. Attacks date from 1999 traffic. |
-| Status        | ❌ Blocked until a working copy is found and checked |
+| Notes         | The CIC page now says "We apologize, this dataset is no longer available", so files cannot be downloaded from the official page. The terms text on that page (read 2026-11-05) allows redistribution and mirroring with a citation. Attacks date from 1999 traffic. |
+| Candidate copy | Zenodo record 17424143, "NSL-KDD Dataset", uploaded by Saad (Helwan University), published 2025-10-23. Files: `KDDTrain+.txt` (14,738,831 bytes, md5 `120b13c9092ab72d4902f2079143cc2c`) and `KDDTest+.txt` (2,573,994 bytes, md5 `1e53a506c102628114ca1b1fa509b6a8`). Record licence CC BY 4.0. The record does not name the original source or the original terms. |
+| Checks still needed | (1) Download both files only after team approval. (2) Confirm md5 values match. (3) Confirm row counts: KDDTrain+ 125,973 and KDDTest+ 22,544 records, 42 columns including the label and difficulty level. (4) Confirm the file content matches the original by comparing a sample with a second independent copy. (5) Cite Tavallaee et al. (2009) and the CIC terms. |
+| Status        | ⚠️ Candidate found, not downloaded. Blocked until the team approves the download and the checks pass. |
 
 ### Feature decision for the Mendeley URL dataset (2026-11-05)
 
