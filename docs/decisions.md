@@ -145,3 +145,15 @@ New decisions get the next number. Never delete an old record; mark it
   dataset. The report must state that the 18-clue extractor was not used for
   training, and that the trained features are the dataset's 85 columns. A
   future phase could add a raw-URL dataset as a new decision.
+
+## ADR-0013: NSL-KDD "worm" attacks are grouped under DoS
+
+- **Status:** Accepted (2026-11-05, Phase 2, team decision)
+- **Context:** NSL-KDD does not name a category for the `worm` attack. Papers
+  group it differently: some put it under DoS, others under a separate group.
+- **Decision:** Keep `worm` in the DoS category, as the mapping in
+  `src/utils/network_preprocessor.py` already does. The report must state this
+  choice. The category mapping is part of the code, so any change needs a new
+  ADR.
+- **Consequences:** The DoS count in the training split includes worm records.
+  Results for the DoS family must be read with this in mind.

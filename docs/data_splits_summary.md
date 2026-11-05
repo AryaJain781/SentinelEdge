@@ -90,5 +90,5 @@ values were altered.
 1. **URL domain source: decided (ADR-0012).** The URL detector trains on the
    85 precomputed Mendeley features. The 18-clue extractor is a utility for
    explanations and demonstrations, not a training input.
-2. **"worm" category.** NSL-KDD's `worm` attack is placed in DoS here. Some
-   papers place it elsewhere. The report must state this choice.
+2. **"worm" category: decided (ADR-0013).** NSL-KDD's `worm` attack stays in
+   DoS. The report must state this choice.
