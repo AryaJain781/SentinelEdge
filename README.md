@@ -151,6 +151,20 @@ check.bat
 
 A green `ALL CHECKS PASSED` means the environment is ready.
 
+**5. Build the datasets (Phase 2)**
+
+Download the raw data (HTTPS only, checksums verified), then build the
+80/10/10 splits (seed 42, stratified):
+
+```bash
+python -m src.utils.download_data
+python -m src.utils.data_loader
+```
+
+The raw and processed files stay on your computer. Git ignores them.
+The NSL-KDD test file is intentionally not downloaded because it was rejected
+(see [docs/data_sources.md](docs/data_sources.md)).
+
 > **Windows tip:** if pip reports a "path too long" error, keep the project in a short folder (for example `C:\dev\SentinelEdge`) or enable Windows long paths.
 
 ---
@@ -169,6 +183,7 @@ A green `ALL CHECKS PASSED` means the environment is ready.
 | `tests/` | Pytest test suite |
 
 Read [docs/decisions.md](docs/decisions.md) for the reasoning behind each design choice.
+Split sizes and class balance are in [docs/data_splits_summary.md](docs/data_splits_summary.md).
 
 ---
 
@@ -179,7 +194,7 @@ Status key: ✅ done · 🔄 in progress · ⏳ planned
 | Work Package | Scope | Status |
 |---|---|---|
 | **WP0** | Project setup: layout, pinned deps, lint/format/test tooling, docs | ✅ Done |
-| **WP1** | Dataset selection, licence review and preprocessing pipeline | ⏳ Planned |
+| **WP1** | Dataset selection, licence review and preprocessing pipeline | ✅ Done (Phases 1–2) |
 | **WP2** | URL micro-detector (classical ML, < 15 ms) | ⏳ Planned |
 | **WP3** | SMS micro-detector (classical ML, < 15 ms) | ⏳ Planned |
 | **WP4** | Network-flow micro-detector (classical ML, < 15 ms) | ⏳ Planned |
