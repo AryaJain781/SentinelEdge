@@ -189,8 +189,6 @@ Status key: ✅ done · 🔄 in progress · ⏳ planned
 | **WP8** | Android front end and on-device integration | ⏳ Planned |
 | **WP9** | Benchmarks, offline validation, final report and viva material | ⏳ Planned |
 
-> The WP1–WP9 scopes are a proposed breakdown from the project architecture. The team should confirm them before Phase 1 begins.
-
 ---
 
 <div align="center">
