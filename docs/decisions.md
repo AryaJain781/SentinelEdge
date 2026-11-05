@@ -198,6 +198,19 @@ New decisions get the next number. Never delete an old record; mark it
   re-measured on the test split, and the report must say that the URL model
   changed in Phase 5. The 85 features and the threshold rule are unchanged.
 
+## ADR-0018: Test split status and what counts as a fresh test (Phase 5)
+
+- **Status:** Accepted (2026-11-05, Phase 5)
+- **Context:** The Phase 5 brief expected the test split to be opened for the
+  first time. It had already been scored once in Phase 3, for the model report.
+- **Decision:** Do not describe the Phase 5 run as the first look at the test
+  split. Every report says the test split was used in Phase 3. A genuinely
+  unseen test needs new data, collected or downloaded after this point, and must
+  be scored once with the final models unchanged.
+- **Consequences:** The reported scores are a final check on the same split, not
+  independent evidence. The limit is stated in the guide, the progress report and
+  the benchmark summary.
+
 ## ADR-0016: Explainer cannot change the verdict; prompt-injection defences (Phase 4)
 
 - **Status:** Accepted (2026-11-05, Phase 4)

@@ -55,6 +55,7 @@ class Verdict:
     explanation: str | None
     explanation_source: str | None
     reason: str = ""
+    clues: tuple[str, ...] = ()
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -68,6 +69,7 @@ class Verdict:
             "explanation": self.explanation,
             "explanation_source": self.explanation_source,
             "reason": self.reason,
+            "clues": list(self.clues),
         }
 
 
@@ -221,4 +223,5 @@ def analyze(
         detector=detector.bundle.get("model_name", detected),
         explanation=explanation,
         explanation_source=source,
+        clues=tuple(_clues_for(detected, input_data)),
     )

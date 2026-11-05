@@ -93,6 +93,12 @@ def render(line: str, out: TextIO, colour: bool) -> None:
     else:
         print(badge("SAFE", "safe", colour), file=out)
     print(f"  Input type     : {verdict.input_type}", file=out)
+    if verdict.clues:
+        print("  Clues found    :", file=out)
+        for clue in verdict.clues:
+            print(f"    - {clue}", file=out)
+    else:
+        print("  Clues found    : none", file=out)
     print(f"  Confidence     : {verdict.confidence:.2f} in '{verdict.label}'", file=out)
     print(
         f"  Threat score   : {verdict.threat_score:.2f} (0 = safe, 1 = threat)",

@@ -227,6 +227,34 @@ def test_malicious_runner_output_is_replaced_by_template(attack: str) -> None:
 
 
 @pytest.mark.skipif(not SMS_MODEL.exists(), reason="SMS model not trained")
+def test_scam_verdict_lists_measured_clues() -> None:
+    verdict = analyze(SCAM, explain=False)
+    assert any("link" in clue for clue in verdict.clues)
+    assert any("urgency" in clue for clue in verdict.clues)
+    assert "clues" in verdict.as_dict()
+
+
+def test_clues_never_contain_untrusted_text() -> None:
+    verdict = analyze(SCAM, explain=False)
+    for clue in verdict.clues:
+        assert "bank account" not in clue
+        assert "OTP" not in clue
+
+
+@pytest.mark.skipif(not SMS_MODEL.exists(), reason="SMS model not trained")
+def test_cli_prints_clues_for_a_scam() -> None:
+    import io
+
+    from src.ui.cli import render
+
+    out = io.StringIO()
+    render(SCAM, out, colour=False)
+    text = out.getvalue()
+    assert "Clues found" in text
+    assert "contains a link" in text
+
+
+@pytest.mark.skipif(not SMS_MODEL.exists(), reason="SMS model not trained")
 def test_explanation_can_be_switched_off() -> None:
     verdict = analyze(SCAM, explain=False)
     assert verdict.is_threat is True
