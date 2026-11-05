@@ -157,3 +157,31 @@ New decisions get the next number. Never delete an old record; mark it
   ADR.
 - **Consequences:** The DoS count in the training split includes worm records.
   Results for the DoS family must be read with this in mind.
+
+## ADR-0014: Model selection protocol (Phase 3)
+
+- **Status:** Accepted (2026-11-05, Phase 3)
+- **Context:** Choosing a model by looking at the test set would make the
+  reported scores optimistic.
+- **Decision:** Fit each candidate on the train split only. Tune hyperparameters
+  and the URL threshold on the validation split. Pick the best validation F1
+  among candidates that meet the limits (model file under 25 MB and median
+  prediction under 15 ms on this PC). Score the test split once, for reporting.
+  If no candidate meets the limits, the best validation F1 is used and flagged.
+- **Consequences:** The reported test scores are not inflated by selection.
+  In NSL-KDD, the random forest has the higher test F1 but misses the latency
+  limit by about 1 ms on this PC, so the logistic regression is chosen. In SMS,
+  the naive Bayes model is chosen on validation F1, even though the logistic
+  regression scores higher on test. We report both and do not switch after
+  seeing test results.
+
+## ADR-0015: Single-thread prediction for one-sample inference
+
+- **Status:** Accepted (2026-11-05, Phase 3)
+- **Context:** Random forests trained with all CPU cores were 41 ms per single
+  prediction, because thread start-up dominates for one sample.
+- **Decision:** Train with all cores, then set the forest to one thread before
+  saving it for prediction.
+- **Consequences:** The URL forest drops from 41 ms to about 13 ms per sample.
+  Batch prediction will be slower per row; this is acceptable for a detector
+  that scores one event at a time.

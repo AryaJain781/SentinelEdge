@@ -195,9 +195,9 @@ Status key: ✅ done · 🔄 in progress · ⏳ planned
 |---|---|---|
 | **WP0** | Project setup: layout, pinned deps, lint/format/test tooling, docs | ✅ Done |
 | **WP1** | Dataset selection, licence review and preprocessing pipeline | ✅ Done (Phases 1–2) |
-| **WP2** | URL micro-detector (classical ML, < 15 ms) | ⏳ Planned |
-| **WP3** | SMS micro-detector (classical ML, < 15 ms) | ⏳ Planned |
-| **WP4** | Network-flow micro-detector (classical ML, < 15 ms) | ⏳ Planned |
+| **WP2** | URL micro-detector (classical ML, < 15 ms) | ✅ Trained (Phase 3), F1 0.85 |
+| **WP3** | SMS micro-detector (classical ML, < 15 ms) | ✅ Trained (Phase 3), F1 0.94 |
+| **WP4** | Network-flow micro-detector (classical ML, < 15 ms) | ✅ Trained (Phase 3), F1 0.97 (logistic regression) |
 | **WP5** | Delimited Prompt Shield for untrusted input | ⏳ Planned |
 | **WP6** | Llama 3.2 1B 4-bit export to ExecuTorch (`.pte`) | ⏳ Planned |
 | **WP7** | Tier 1 → Tier 2 pipeline and advisory generation | ⏳ Planned |
