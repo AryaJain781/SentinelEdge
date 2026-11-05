@@ -1,0 +1,80 @@
+# ==========================================================
+# .gitignore - On-Device Cyber Threat Detection project
+# ==========================================================
+
+# ---- Datasets (never commit data) ----
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.csv
+*.parquet
+*.txt
+!requirements.txt
+
+# ---- Model weights & compiled model artifacts ----
+models/*
+!models/.gitkeep
+*.pkl
+*.joblib
+*.bin
+*.pte
+*.pt
+*.onnx
+*.gguf
+*.safetensors
+
+# ---- Internal guides, documents & PDFs ----
+*.pdf
+*.docx
+*.doc
+*Team_Guide*
+*PRD*
+TEAM_EXPLAINER_AND_VIVA_GUIDE.md
+
+# ---- Notebook / benchmark scratch outputs ----
+.ipynb_checkpoints/
+benchmarks/results/*
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- Python caches & build output ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ---- Android / mobile build output ----
+*.apk
+*.aab
+local.properties
+.gradle/
+android/app/build/
+
+# ---- Temporary, log & OS / editor files ----
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+.DS_Store
+Thumbs.ini
+desktop.ini
+.vscode/
+.idea/
+
+# ---- Secrets ----
+.env
+.env.*
+*.key
+*.pem
