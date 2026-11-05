@@ -56,3 +56,77 @@ New decisions get the next number. Never delete an old record; mark it
   auto-fix, Ruff lint (must be clean), then Pytest. They stop at the first
   failure.
 - **Consequences:** One command gives a clear pass or fail result.
+
+---
+
+## ADR-0006: Three threat vectors for the detectors
+
+- **Status:** Accepted (2026-11-05, Phase 1)
+- **Context:** The project needs a focused scope that can be built and
+  evaluated within the M.Tech timeline.
+- **Decision:** Build three micro-detectors: phishing URLs, scam SMS, and
+  network-flow anomalies. Each has its own dataset and its own documentation
+  in `docs/threat_explainers.md`.
+- **Consequences:** Clear, testable scope. Each detector has its own
+  false-positive and false-negative analysis. Other threats are out of scope
+  unless a new ADR adds them.
+
+## ADR-0007: Runtime detection uses static, offline features only
+
+- **Status:** Accepted (2026-11-05, Phase 1)
+- **Context:** Visiting a suspicious link or contacting a server would leak
+  data and break the offline rule (ADR-0002).
+- **Decision:** At runtime, every feature is computed from the item itself
+  (URL string, SMS text, or flow record). No page is fetched and no lookup
+  service is called. Any dataset column that needs a web visit is excluded
+  from the runtime feature set.
+- **Consequences:** Safe and private, and it fits the offline rule. Some
+  threats, such as a new phishing page on a hacked real domain, cannot be
+  caught this way, and the report must say so.
+
+## ADR-0008: The detector decides, the language model only explains
+
+- **Status:** Accepted (2026-11-05, Phase 1)
+- **Context:** A language model can be tricked by hostile text (prompt
+  injection), so it should not make security decisions.
+- **Decision:** The block-or-allow decision comes from the classical detector
+  score. The Llama model receives only the detector's clues and a delimited,
+  sandboxed copy of the untrusted text, and it writes the explanation. The
+  model has no tools and no network access.
+- **Consequences:** A successful prompt injection can change the wording of
+  the explanation but not the decision. The Delimited Prompt Shield is a
+  required component (WP5).
+
+## ADR-0009: 4-bit groupwise Llama 3.2 1B on ExecuTorch with XNNPACK
+
+- **Status:** Accepted, with a memory risk (2026-11-05, Phase 1)
+- **Context:** The model must run on an Arm Android CPU within a phone's RAM.
+  Public 4-bit exports are about 1.0 GiB, which is larger than our 750 MB plan.
+- **Decision:** Use ExecuTorch with the XNNPACK backend and 4-bit groupwise
+  weights. Set a peak-memory budget of under 1.1 GB, with a 2,048-token
+  context as the default. If measured memory exceeds the budget, reduce the
+  context to 1,024 tokens first, then revisit quantization settings.
+- **Consequences:** The budget is an estimate and must be measured in WP6.
+  Any change to the context length or quantization becomes a new ADR.
+
+## ADR-0010: Dataset licence must be confirmed before use
+
+- **Status:** Accepted (2026-11-05, Phase 1)
+- **Context:** Sources disagree or are silent on the licences of the UCI SMS
+  Spam Collection, the Mendeley phishing dataset and NSL-KDD. Using data
+  without permission is a legal and academic risk.
+- **Decision:** No dataset is downloaded or used in code until its licence is
+  confirmed on its official page and recorded in `docs/data_sources.md`.
+- **Consequences:** WP1 includes a licence-check step. Phase 2 cannot start on
+  a dataset that is still marked "Verify".
+
+## ADR-0011: Phishing URL detector favours high recall
+
+- **Status:** Accepted (2026-11-05, Phase 1)
+- **Context:** Missing a phishing site can expose passwords and card details,
+  which is more harmful than a false alarm that the user can dismiss.
+- **Decision:** Choose the URL detector threshold to favour recall. Each block
+  shows its reasons and an easy "I trust this site" option. The final threshold
+  will be set in WP2 using the validation data.
+- **Consequences:** Some legitimate unusual domains will be flagged. Precision
+  is reported alongside recall in the benchmark phase.
