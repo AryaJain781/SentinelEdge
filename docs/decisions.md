@@ -130,3 +130,18 @@ New decisions get the next number. Never delete an old record; mark it
   will be set in WP2 using the validation data.
 - **Consequences:** Some legitimate unusual domains will be flagged. Precision
   is reported alongside recall in the benchmark phase.
+
+## ADR-0012: URL detector trains on the 85 precomputed Mendeley features
+
+- **Status:** Accepted (2026-11-05, Phase 2, team decision: option A)
+- **Context:** The Mendeley dataset contains precomputed numbers but no raw web
+  addresses. The 18-clue extractor in `src/utils/url_features.py` needs raw
+  addresses, so it cannot be trained on this data.
+- **Decision:** Train the URL detector (WP2) on the 85 URL-only columns that
+  `src/utils/data_loader.py` keeps from the Mendeley file. The 18-clue
+  extractor is kept as a readable, explainable utility and is used for
+  explanations and demonstrations, not as training input.
+- **Consequences:** The URL detector can be built now without finding a new
+  dataset. The report must state that the 18-clue extractor was not used for
+  training, and that the trained features are the dataset's 85 columns. A
+  future phase could add a raw-URL dataset as a new decision.

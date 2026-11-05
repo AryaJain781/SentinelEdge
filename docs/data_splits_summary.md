@@ -87,11 +87,8 @@ values were altered.
 
 ## 5. Open decisions
 
-1. **URL domain source.** The Mendeley dataset has no raw URL strings, so the
-   18-feature extractor cannot be trained on it. Options:
-   - (a) Train the URL detector on the 85 precomputed Mendeley features, and
-     keep the 18-feature extractor only for demonstrations.
-   - (b) Find a public dataset that contains raw URLs and train the extractor on it.
-   Team decision needed before the URL detector is built (WP2).
+1. **URL domain source: decided (ADR-0012).** The URL detector trains on the
+   85 precomputed Mendeley features. The 18-clue extractor is a utility for
+   explanations and demonstrations, not a training input.
 2. **"worm" category.** NSL-KDD's `worm` attack is placed in DoS here. Some
    papers place it elsewhere. The report must state this choice.
