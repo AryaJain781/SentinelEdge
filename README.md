@@ -184,6 +184,8 @@ The NSL-KDD test file is intentionally not downloaded because it was rejected
 
 Read [docs/decisions.md](docs/decisions.md) for the reasoning behind each design choice.
 Split sizes and class balance are in [docs/data_splits_summary.md](docs/data_splits_summary.md).
+The full write-up — architecture, datasets, measured results, limitations and
+lessons learned — is in [docs/technical_report.md](docs/technical_report.md).
 
 ---
 
@@ -229,11 +231,19 @@ Status key: ✅ done · 🔄 in progress · ⏳ planned
 | **WP2** | URL micro-detector (classical ML, < 15 ms) | ✅ Trained (Phase 3), F1 0.85 |
 | **WP3** | SMS micro-detector (classical ML, < 15 ms) | ✅ Trained (Phase 3), F1 0.94 |
 | **WP4** | Network-flow micro-detector (classical ML, < 15 ms) | ✅ Trained (Phase 3), F1 0.97 (logistic regression) |
-| **WP5** | Delimited Prompt Shield for untrusted input | ⏳ Planned |
-| **WP6** | Llama 3.2 1B 4-bit export to ExecuTorch (`.pte`) | ⏳ Planned |
+| **WP5** | Unified router + Delimited Prompt Shield for untrusted input | ✅ Done (Phase 4), tested in `tests/test_pipeline.py` |
+| **WP6** | Llama 3.2 1B 4-bit export to ExecuTorch (`.pte`) | ⏳ Planned — design budget only (`docs/executorch_summary.md`); `ExecuTorchRunner` is a stub today |
 | **WP7** | Tier 1 → Tier 2 pipeline and advisory generation | ⏳ Planned |
-| **WP8** | Android front end and on-device integration | ⏳ Planned |
+| **WP8** | Android front end and on-device integration | ⏳ Planned (`deploy/` is an empty placeholder) |
 | **WP9** | Benchmarks, offline validation, final report and viva material | ⏳ Planned |
+
+**Documentation pass (this phase):** the full academic write-up for WP0–WP5,
+with every number traced to its source and every open item stated plainly, is
+in [`docs/technical_report.md`](docs/technical_report.md). It does **not**
+mark WP6 as complete — the on-device Llama/ExecuTorch work described in that
+work package has not started, only designed and budgeted. See the report's
+Section 2 for a note on why "Phase 6" means two different things in this
+repo's own documents.
 
 ---
 
