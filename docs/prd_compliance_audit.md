@@ -51,10 +51,20 @@ ALL CHECKS PASSED
 
 The 2 skips are the known, documented case of tests that require a trained model bundle not present in a fresh clone (guarded skips, not failures). No lint or format errors.
 
-**Scope note for this audit:** the Phase 8 deliverables (`deploy/export_detectors.py`, `deploy/validate_mobile_parity.py`, `deploy/export_llama_pte.py`) were authored after that last `check.ps1` run and have **not yet been run through Black/Ruff/Pytest on your machine**, because they depend on packages (`skl2onnx`, `executorch`, `optimum-executorch`) that aren't part of the pinned runtime stack and were only partially installed today. They are correctly excluded from the "156 passed" figure above — that figure describes `src/`, `tests/`, and the Phase 0–7 code only. Before final submission, run `check.ps1` once more after adding the Phase 8 scripts, so the formatting/lint pass (which doesn't need the extra packages installed) covers them too.
+**Update (2026-11-22, Phase 9):** `check.ps1` was re-run after the Phase 8 `deploy/` scripts (`export_detectors.py`, `validate_mobile_parity.py`, `export_llama_pte.py`) were added to the repo. Result:
+
+```
+==> 1/4 Formatting with Black — All done! 27 files left unchanged.
+==> 2/4 Linting with Ruff (auto-fix) — All checks passed!
+==> 3/4 Linting with Ruff (must be clean) — All checks passed!
+==> 4/4 Running tests with Pytest — 156 passed, 2 skipped, 1 warning
+ALL CHECKS PASSED (format, lint, tests)
+```
+
+Same pass/skip counts as the Phase 7 run, confirming the Phase 8 scripts are Black/Ruff-clean and introduced no regressions. The 1 warning is a harmless `scipy.optimize` deprecation notice from inside `sklearn`'s internals, unrelated to this project's code. The scope note above (about `skl2onnx`/`executorch`/`optimum-executorch` not being part of the pinned runtime stack) still applies to why those packages aren't in `requirements.txt` — it does not affect this lint/format/test result.
 
 ---
 
 ## Overall verdict
 
-All three PRD Section 3 Operating Rules items **pass** as of this audit: no cloud dependency, no secrets, clean `.gitignore`, and a clean last test run. The one open item is cosmetic (re-running `check.ps1` after the Phase 8 files are added, to confirm they're Black/Ruff-clean) and does not affect the offline/privacy guarantees the PRD cares about.
+All three PRD Section 3 Operating Rules items **pass**: no cloud dependency, no secrets, clean `.gitignore`, and a clean full-repo test run including the Phase 8 deliverables. No open items remain from this audit.
