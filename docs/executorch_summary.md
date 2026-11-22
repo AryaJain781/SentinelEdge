@@ -58,18 +58,24 @@ factor. Small groups keep more accuracy but store more scale values.
 | Activations | 8-bit dynamic (in the `8da4w` recipe) | Keeps arithmetic fast on the CPU |
 | Norm layers | Higher precision | Small and sensitive to rounding |
 
-**Size estimate (*estimate*):**
+**Size: measured, not estimated (2026-11-21 — see ADR-0019):**
 
-| Format | Approximate size | Source of the figure |
+| Format | Size | Source of the figure |
 |---|---|---|
 | BF16 original (about 1.24 billion parameters x 2 bytes) | about 2.46 GB | Parameter count arithmetic |
-| 4-bit groupwise, target | about 750 MB | Team planning estimate (*estimate*) |
+| 4-bit groupwise, target | about 750 MB | Team planning estimate (*estimate*, superseded below) |
 | 4-bit SpinQuant `.pte` found publicly | about 1.0 GiB | Community export, Software Mansion release |
+| **4-bit linear only (`--qlinear 8da4w`), this project** | **1,746.5 MB** | **Actually exported and measured — embedding table left unquantized was the cause of the overage** |
+| **4-bit linear + 4-bit embedding (`--qlinear 8da4w --qembedding 4w`), this project** | **827.7 MB** | **Actually exported and measured — see ADR-0019** |
 
-**Correction to the plan:** the public SpinQuant 1B `.pte` is about 1.0 GiB,
-which is larger than our 750 MB target. The 750 MB figure is therefore
-optimistic. The memory budget in Section 4 uses the more cautious figure
-and shows what happens if the model is 1.0 GiB.
+**Correction to the plan:** the public SpinQuant 1B `.pte` (about 1.0 GiB) already
+showed the 750 MB target was optimistic. This project's own first real export
+confirmed it dramatically — 1,746.5 MB with linear-only quantization, because
+Llama 3.2's large vocabulary leaves an unquantized embedding/output table as
+the dominant remaining cost. Quantizing the embedding table too (4-bit) brought
+the real, measured file to 827.7 MB: above the optimistic 750 MB plan, but
+within the cautious 1,024 MB case the memory budget in Section 4 is built
+around.
 
 ---
 

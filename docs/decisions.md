@@ -230,3 +230,41 @@ New decisions get the next number. Never delete an old record; mark it
   Phase 6, so the explanations shown now come from the template.
 - **Known gap:** raw web addresses are reported as unsupported, because the URL
   model needs the 85 Mendeley columns, which this build does not compute.
+
+## ADR-0019: Llama 3.2 1B ExecuTorch export — actual result vs. plan (Phase 8)
+
+- **Status:** Accepted (2026-11-21, Phase 8)
+- **Context:** `docs/executorch_summary.md` Section 3 planned 4-bit groupwise
+  quantization at an *optimistic* 750 MB target and flagged a *cautious*
+  1,024 MB case (based on a public SpinQuant 1B `.pte` release) as the
+  figure the memory budget should actually be checked against. Both were
+  estimates; neither had been produced by this project.
+- **Decision / actual result:** The export was run end-to-end on 2026-11-21
+  using `optimum-cli export executorch` (package `optimum-executorch`,
+  not a base-`optimum` extra) with `--recipe xnnpack --qlinear 8da4w
+  --qlinear_group_size 128`. The first run, quantizing only the linear
+  (attention/MLP) layers, produced a **1,746.5 MB** `.pte` — over both the
+  optimistic and cautious budgets. Root cause: Llama 3.2's ~128k-token
+  vocabulary makes the (tied) embedding/output table large, and it is not
+  touched by `--qlinear`. Adding `--qembedding 4w --qembedding_group_size
+  128` to also quantize the embedding table brought the real file down to
+  **827.7 MB** — above the optimistic 750 MB plan, but within the cautious
+  1,024 MB budget from Section 4.
+- **Consequences:** The cautious case in Section 4's RAM budget table
+  (about 1,248 MB peak, over the ~1,100 MB target) is superseded by this
+  measured 827.7 MB model size; the peak-RAM estimate should be reworked
+  from this real number rather than the 1.0 GiB placeholder, in the
+  benchmark phase when peak RAM is actually measured on-device (see
+  `docs/on_device_benchmarks.md`). `deploy/export_llama_pte.py` was fixed
+  in the same session: two CLI flag names guessed before ever running the
+  command (`--group_size` → `--qlinear_group_size`) and a missing
+  `coremltools` dependency (imported internally by `optimum-executorch`
+  regardless of recipe) were both real bugs, not estimates, and are now
+  corrected and recorded here rather than left as silent assumptions.
+- **Known gap:** the `.pte` file has been exported and (separately) pushed
+  to a physical Android device's storage via `adb push`, but has not yet
+  been loaded and run by an ExecuTorch runtime on that device — the
+  Android app (ExecuTorch's `LlamaDemo`) requires building from source
+  with Android Studio/NDK, which was out of scope for this session. Actual
+  on-device inference, tokens/sec, and peak RAM remain `TBD` in
+  `docs/on_device_benchmarks.md` until that app is built and run.
