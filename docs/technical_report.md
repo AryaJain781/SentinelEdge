@@ -343,12 +343,30 @@ Three optimizations are already measured and in effect for Tier 1; one
 
 ## Section 7: Device Deployment & Benchmarks
 
-**What has not happened yet, stated plainly:** no Android build exists
-(`deploy/` is currently an empty placeholder directory), no `.pte` export has
-been produced, and no measurement — latency, memory, or battery — has been
-taken on an actual Arm/Android device. Every number in Sections 4 and 6 above
-is a PC measurement (development machine, 2026-11-05 run), not a phone
-measurement, as the benchmark documents themselves state.
+**Update (2026-11-21/22, Phase 8):** since this report was first drafted in
+Phase 6, the Llama 3.2 1B ExecuTorch export described below as a future plan
+was actually attempted and completed. Using `optimum-cli export executorch`
+(package `optimum-executorch`) with `--recipe xnnpack --qlinear 8da4w
+--qlinear_group_size 128`, a first export quantizing only the linear layers
+produced a real, loadable `.pte` file — but at 1,746.5 MB, well over budget,
+because Llama 3.2's large vocabulary leaves the embedding/output table
+unquantized. Adding `--qembedding 4w --qembedding_group_size 128` to also
+quantize the embedding table brought the real, measured file to **827.7 MB**,
+within the cautious 1,024 MB budget (see `docs/decisions.md` ADR-0019 and
+`docs/executorch_summary.md` Section 3 for full detail). This `.pte` file was
+then pushed via `adb push` onto a physical Android device's storage,
+confirming the file-transfer pipeline works end-to-end on real hardware.
+
+**What still has not happened, stated plainly:** the `.pte` file has not yet
+been loaded and run by an ExecuTorch runtime on the device — that requires
+building ExecuTorch's `LlamaDemo` Android app from source (Android Studio,
+NDK, and a prebuilt AAR library), which was out of scope for this session.
+So actual on-device inference, tokens/sec, peak RAM, and battery draw remain
+unmeasured and are marked `TBD` in `docs/on_device_benchmarks.md`. Every
+number in Sections 4 and 6 above is still a PC measurement (development
+machine, 2026-11-05 run), not a phone inference measurement — the export and
+file-transfer milestones above are real and on-device, but they are not the
+same as a measured on-device inference run.
 
 **What the benchmark methodology already establishes, ready to be repeated
 on-device unchanged (`benchmarks/evaluate_all.py`):**
